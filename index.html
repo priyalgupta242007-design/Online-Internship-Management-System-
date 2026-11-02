@@ -1,0 +1,1512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InternPortal – Online Internship Management System</title>
+  <meta name="description" content="Connect students, recruiters, and college administrators to streamline internship discovery, smart skill matching, recruitment workflows, and progress tracking." />
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- React 18 & Babel Standalone from CDN for 100% Single-File Execution -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    :root {
+      --primary-50: #eff6ff;
+      --primary-100: #dbeafe;
+      --primary-200: #bfdbfe;
+      --primary-300: #93c5fd;
+      --primary-400: #60a5fa;
+      --primary-500: #3b82f6;
+      --primary-600: #2563eb;
+      --primary-700: #1d4ed8;
+      --primary-800: #1e40af;
+      --primary-900: #1e3a8a;
+
+      --navy-900: #0f172a;
+      --navy-800: #1e293b;
+      --navy-700: #334155;
+      --slate-600: #475569;
+      --slate-500: #64748b;
+      --slate-400: #94a3b8;
+      --slate-300: #cbd5e1;
+      --slate-200: #e2e8f0;
+      --slate-100: #f1f5f9;
+      --slate-50: #f8fafc;
+
+      --success-50: #f0fdf4;
+      --success-500: #22c55e;
+      --success-700: #15803d;
+
+      --warning-50: #fffbeb;
+      --warning-500: #f59e0b;
+      --warning-700: #b45309;
+
+      --danger-50: #fef2f2;
+      --danger-500: #ef4444;
+      --danger-700: #b91c1c;
+
+      --purple-50: #faf5ff;
+      --purple-500: #a855f7;
+      --purple-700: #7e22ce;
+
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --radius-full: 9999px;
+
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.04);
+      --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.05);
+
+      --font-heading: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-body);
+      background-color: var(--slate-50);
+      color: var(--navy-800);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-heading);
+      color: var(--navy-900);
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    .app-container { min-height: 100vh; display: flex; flex-direction: column; }
+    .main-content { flex: 1; }
+    .container {
+      width: 100%;
+      max-width: 1280px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 0.925rem;
+      padding: 10px 20px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid transparent;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-700) 100%);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-600) 100%);
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+      transform: translateY(-1px);
+    }
+    .btn-secondary {
+      background: #ffffff;
+      color: var(--navy-800);
+      border-color: var(--slate-200);
+      box-shadow: var(--shadow-sm);
+    }
+    .btn-secondary:hover {
+      background: var(--slate-50);
+      border-color: var(--slate-300);
+      color: var(--primary-600);
+    }
+    .btn-outline-primary {
+      background: transparent;
+      color: var(--primary-600);
+      border-color: var(--primary-600);
+    }
+    .btn-outline-primary:hover { background: var(--primary-50); }
+    .btn-danger { background: var(--danger-500); color: #fff; }
+    .btn-danger:hover { background: var(--danger-700); }
+    .btn-success { background: var(--success-500); color: #fff; }
+    .btn-success:hover { background: var(--success-700); }
+    .btn-sm { padding: 6px 14px; font-size: 0.85rem; border-radius: var(--radius-sm); }
+    .btn-lg { padding: 14px 28px; font-size: 1.05rem; border-radius: var(--radius-lg); }
+
+    .card {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--slate-200);
+      box-shadow: var(--shadow-sm);
+      transition: all 0.25s ease;
+      overflow: hidden;
+    }
+    .card-hover:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--primary-200);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .badge-blue { background: var(--primary-50); color: var(--primary-700); border: 1px solid var(--primary-200); }
+    .badge-green { background: var(--success-50); color: var(--success-700); border: 1px solid #bbf7d0; }
+    .badge-amber { background: var(--warning-50); color: var(--warning-700); border: 1px solid #fde68a; }
+    .badge-red { background: var(--danger-50); color: var(--danger-700); border: 1px solid #fecaca; }
+    .badge-purple { background: var(--purple-50); color: var(--purple-700); border: 1px solid #e9d5ff; }
+
+    .skill-match-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+    }
+    .match-high { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+    .match-med { background: #fef3c7; color: #b45309; border: 1px solid #fcd34d; }
+    .match-low { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
+
+    .form-group { margin-bottom: 18px; }
+    .form-label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--navy-800);
+      margin-bottom: 6px;
+    }
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: 10px 14px;
+      font-size: 0.95rem;
+      font-family: var(--font-body);
+      border: 1px solid var(--slate-300);
+      border-radius: var(--radius-md);
+      background: #ffffff;
+      color: var(--navy-900);
+      transition: all 0.2s ease;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      outline: none;
+      border-color: var(--primary-500);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    }
+    .form-textarea { resize: vertical; min-height: 100px; }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 16px;
+      animation: fadeIn 0.2s ease;
+    }
+    .modal-content {
+      background: #ffffff;
+      border-radius: var(--radius-xl);
+      max-width: 650px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-xl);
+      animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(20px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #ffffff;
+      border-bottom: 1px solid var(--slate-200);
+      box-shadow: var(--shadow-sm);
+    }
+    .navbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--navy-900);
+      font-family: var(--font-heading);
+      font-size: 1.35rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .logo-badge {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, var(--primary-600), var(--primary-800));
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      list-style: none;
+    }
+    .nav-link-btn {
+      background: none;
+      border: none;
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--slate-600);
+      cursor: pointer;
+      position: relative;
+      padding: 6px 0;
+      transition: color 0.15s ease;
+    }
+    .nav-link-btn:hover, .nav-link-btn.active { color: var(--primary-600); }
+    .nav-link-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--primary-600);
+      border-radius: 2px;
+    }
+
+    .demo-role-banner {
+      background: linear-gradient(90deg, #1e293b 0%, #0f172a 100%);
+      color: #e2e8f0;
+      padding: 6px 16px;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .role-pill-btn {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      padding: 3px 10px;
+      font-size: 0.75rem;
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .role-pill-btn:hover, .role-pill-btn.active {
+      background: var(--primary-600);
+      border-color: var(--primary-400);
+    }
+
+    .hero-gradient {
+      background: radial-gradient(circle at 80% 20%, rgba(219, 234, 254, 0.8) 0%, rgba(248, 250, 252, 1) 70%);
+      border-bottom: 1px solid var(--slate-200);
+    }
+    .data-table-container {
+      width: 100%;
+      overflow-x: auto;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--slate-200);
+      background: #ffffff;
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+    .data-table th {
+      background: var(--slate-50);
+      padding: 14px 18px;
+      font-weight: 700;
+      color: var(--slate-600);
+      border-bottom: 1px solid var(--slate-200);
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+    }
+    .data-table td {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--slate-100);
+      color: var(--navy-800);
+      vertical-align: middle;
+    }
+    .data-table tr:hover { background: var(--primary-50); }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- React Single File Application Bundle -->
+  <script type="text/babel">
+    const { useState, useEffect, useMemo, createContext, useContext } = React;
+
+    // --- MOCK DATABASE & LOCAL PERSISTENCE ---
+    const initialUsers = [
+      {
+        id: 1,
+        name: 'College Admin Officer',
+        email: 'admin@internportal.com',
+        role: 'ADMIN',
+        phone: '+91 9876543210',
+        avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+        isActive: true
+      },
+      {
+        id: 2,
+        name: 'Aarav Sharma',
+        email: 'aarav.sharma@college.edu',
+        role: 'STUDENT',
+        phone: '+91 9811223344',
+        avatarUrl: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150',
+        collegeName: 'National Institute of Engineering',
+        degree: 'B.Tech',
+        branch: 'Computer Science & Engineering',
+        graduationYear: 2026,
+        cgpa: 8.85,
+        skills: 'React.js, JavaScript, HTML5, CSS3, Node.js, Java, Spring Boot, MySQL, Git, TailwindCSS',
+        bio: 'Passionate full-stack developer eager to build resilient web applications and cloud architectures.',
+        resumeFileName: 'Aarav_Sharma_Resume.pdf',
+        resumeCompleteness: 95,
+        githubUrl: 'https://github.com/aaravsharma',
+        linkedinUrl: 'https://linkedin.com/in/aaravsharma',
+        portfolioUrl: 'https://aarav.dev',
+        preferredDomain: 'Web Development',
+        preferredWorkMode: 'REMOTE',
+        isActive: true
+      },
+      {
+        id: 5,
+        name: 'TechCorp HR Talent Team',
+        email: 'recruiter@techcorp.io',
+        role: 'RECRUITER',
+        phone: '+91 9844556677',
+        avatarUrl: 'https://images.unsplash.com/photo-1572021335469-31706a17aaef?w=150',
+        companyName: 'TechCorp Labs',
+        companyWebsite: 'https://techcorp.io',
+        industry: 'Software & Cloud Engineering',
+        location: 'Bengaluru, Karnataka',
+        verificationStatus: 'APPROVED',
+        isActive: true
+      }
+    ];
+
+    const initialInternships = [
+      {
+        id: 1,
+        recruiterId: 5,
+        title: 'Full Stack Web Developer Intern',
+        companyName: 'TechCorp Labs',
+        domain: 'Web Development',
+        description: 'Join our core platform engineering team to build user-facing features using React.js and Spring Boot microservices. You will collaborate with senior architects to create high-performance interactive experiences.',
+        responsibilities: '• Design responsive web components in React.\n• Integrate RESTful APIs built with Spring Boot.\n• Implement unit and integration tests.\n• Participate in agile sprints and daily standups.',
+        requirements: '• Proficiency in JavaScript (ES6+), React.js, and CSS.\n• Understanding of Spring Boot or Node.js backend concepts.\n• Eagerness to learn and write clean, maintainable code.',
+        requiredSkills: 'React.js, JavaScript, HTML5, CSS3, Spring Boot, MySQL, Git',
+        location: 'Bengaluru, Karnataka',
+        workMode: 'HYBRID',
+        stipendAmount: 25000,
+        stipendType: 'FIXED',
+        durationMonths: 6,
+        openingsCount: 4,
+        minCgpa: 7.5,
+        perks: 'Certificate of Completion, Pre-Placement Offer (PPO) potential, Flexible hours, Free lunch & snacks',
+        applicationDeadline: '2026-12-15',
+        status: 'ACTIVE',
+        createdAt: '2026-10-15'
+      },
+      {
+        id: 2,
+        recruiterId: 5,
+        title: 'Frontend Engineering Intern (React)',
+        companyName: 'TechCorp Labs',
+        domain: 'Web Development',
+        description: 'Work alongside senior designers and UI architects to enhance our enterprise design system and optimize client-side bundle performance.',
+        responsibilities: '• Build reusable, accessible UI component library.\n• Benchmark and enhance page load speeds.\n• Collaborate with UX researchers to test new interactive flows.',
+        requirements: '• Hands-on experience building projects with React.js.\n• Familiarity with CSS Flexbox/Grid, TailwindCSS, and responsive design.',
+        requiredSkills: 'React.js, JavaScript, HTML5, CSS3, TailwindCSS, Git',
+        location: 'Remote',
+        workMode: 'REMOTE',
+        stipendAmount: 20000,
+        stipendType: 'FIXED',
+        durationMonths: 3,
+        openingsCount: 3,
+        minCgpa: 7.0,
+        perks: 'Certificate of Completion, 1-on-1 mentorship sessions, High PPO conversion rate',
+        applicationDeadline: '2026-11-30',
+        status: 'ACTIVE',
+        createdAt: '2026-10-20'
+      },
+      {
+        id: 3,
+        recruiterId: 5,
+        title: 'Cloud & DevOps Intern',
+        companyName: 'CloudScale Solutions',
+        domain: 'Cloud & DevOps',
+        description: 'Scale and automate cloud infrastructure serving millions of transactions daily. Gain direct production experience with Kubernetes, Docker, and AWS.',
+        responsibilities: '• Maintain CI/CD automated deployment pipelines on GitHub Actions.\n• Deploy containerized applications on AWS ECS & EKS.\n• Monitor system health using Prometheus and Grafana.',
+        requirements: '• Familiarity with Linux command line and Docker basics.\n• Understanding of cloud services (AWS or Azure).\n• Scripting knowledge in Python or Bash.',
+        requiredSkills: 'Docker, Kubernetes, AWS, Linux, Python, Git',
+        location: 'Hyderabad, Telangana',
+        workMode: 'IN_OFFICE',
+        stipendAmount: 30000,
+        stipendType: 'FIXED',
+        durationMonths: 6,
+        openingsCount: 2,
+        minCgpa: 8.0,
+        perks: 'AWS Certification exam sponsorship, High PPO conversion rate, Travel reimbursement',
+        applicationDeadline: '2026-12-20',
+        status: 'ACTIVE',
+        createdAt: '2026-10-18'
+      },
+      {
+        id: 4,
+        recruiterId: 5,
+        title: 'Machine Learning & Data Analyst Intern',
+        companyName: 'FinTech Nexus',
+        domain: 'Data Science & AI',
+        description: 'Collaborate with quantitative analysts and data scientists to evaluate transaction behaviors, detect anomalies, and build predictive risk scoring models.',
+        responsibilities: '• Clean and preprocess large-scale financial datasets using Pandas.\n• Train regression and classification models in Scikit-Learn.\n• Create interactive dashboards using Streamlit or Power BI.',
+        requirements: '• Solid foundation in Python, NumPy, Pandas, and SQL.\n• Basic knowledge of statistical hypothesis testing and machine learning algorithms.',
+        requiredSkills: 'Python, Machine Learning, SQL, Pandas, NumPy, Scikit-Learn',
+        location: 'Mumbai, Maharashtra',
+        workMode: 'HYBRID',
+        stipendAmount: 28000,
+        stipendType: 'FIXED',
+        durationMonths: 4,
+        openingsCount: 3,
+        minCgpa: 8.0,
+        perks: 'Competitive stipend, PPO review, Real-world financial modeling exposure',
+        applicationDeadline: '2026-12-05',
+        status: 'ACTIVE',
+        createdAt: '2026-10-22'
+      }
+    ];
+
+    const initialApplications = [
+      {
+        id: 1,
+        internshipId: 1,
+        internshipTitle: 'Full Stack Web Developer Intern',
+        companyName: 'TechCorp Labs',
+        domain: 'Web Development',
+        location: 'Bengaluru, Karnataka',
+        stipendAmount: 25000,
+        studentId: 2,
+        studentName: 'Aarav Sharma',
+        studentEmail: 'aarav.sharma@college.edu',
+        studentPhone: '+91 9811223344',
+        studentCollege: 'National Institute of Engineering',
+        studentBranch: 'Computer Science & Engineering',
+        studentCgpa: '8.85',
+        studentSkills: 'React.js, JavaScript, HTML5, CSS3, Spring Boot, MySQL, Git',
+        coverNote: 'I have developed multiple full-stack projects using React and Spring Boot. I would love to contribute to TechCorp Labs!',
+        resumeUrl: '/uploads/Aarav_Sharma_Resume.pdf',
+        skillMatchPercentage: 92,
+        matchedSkills: 'React.js, JavaScript, HTML5, CSS3, Spring Boot, MySQL, Git',
+        missingSkills: '',
+        status: 'SHORTLISTED',
+        recruiterFeedback: 'Strong project portfolio and clean code samples. Candidate shortlisted for round 1.',
+        appliedAt: '2026-10-25T14:30:00'
+      },
+      {
+        id: 2,
+        internshipId: 2,
+        internshipTitle: 'Frontend Engineering Intern (React)',
+        companyName: 'TechCorp Labs',
+        domain: 'Web Development',
+        location: 'Remote',
+        stipendAmount: 20000,
+        studentId: 2,
+        studentName: 'Aarav Sharma',
+        studentEmail: 'aarav.sharma@college.edu',
+        studentPhone: '+91 9811223344',
+        studentCollege: 'National Institute of Engineering',
+        studentBranch: 'Computer Science & Engineering',
+        studentCgpa: '8.85',
+        studentSkills: 'React.js, JavaScript, HTML5, CSS3, TailwindCSS, Git',
+        coverNote: 'Excited about frontend performance optimization and component design.',
+        resumeUrl: '/uploads/Aarav_Sharma_Resume.pdf',
+        skillMatchPercentage: 96,
+        matchedSkills: 'React.js, JavaScript, HTML5, CSS3, TailwindCSS, Git',
+        missingSkills: '',
+        status: 'INTERVIEW_SCHEDULED',
+        recruiterFeedback: 'Interview scheduled for Nov 10, 2026 at 10:00 AM. Check calendar link.',
+        appliedAt: '2026-10-27T10:15:00'
+      }
+    ];
+
+    const initialInterviews = [
+      {
+        id: 1,
+        applicationId: 2,
+        studentId: 2,
+        studentName: 'Aarav Sharma',
+        studentEmail: 'aarav.sharma@college.edu',
+        recruiterId: 5,
+        companyName: 'TechCorp Labs',
+        internshipId: 2,
+        internshipTitle: 'Frontend Engineering Intern (React)',
+        title: 'Technical Round 1: React & Component Architecture',
+        scheduledDate: '2026-11-10',
+        scheduledTime: '10:00 AM',
+        meetingLink: 'https://meet.google.com/xyz-intern-techcorp',
+        instructions: 'Please be ready with a code editor to discuss state management, custom hooks, and CSS layouts.',
+        status: 'SCHEDULED'
+      }
+    ];
+
+    // --- SMART SKILL MATCHING ALGORITHM ---
+    function calculateSkillMatch(studentSkillsInput, requiredSkillsInput) {
+      const parseSkills = (input) => {
+        if (!input) return [];
+        if (Array.isArray(input)) return input.map(s => s.trim().toLowerCase());
+        return input.split(/[,;\n]+/).map(s => s.trim().toLowerCase()).filter(s => s.length > 0);
+      };
+
+      const studentSkills = parseSkills(studentSkillsInput);
+      const requiredSkills = parseSkills(requiredSkillsInput);
+
+      if (requiredSkills.length === 0) {
+        return {
+          matchPercentage: 100,
+          matchedSkills: [],
+          missingSkills: [],
+          recommendation: 'No mandatory technical requirements. Great opportunity to apply!',
+          isEligible: true
+        };
+      }
+
+      const isMatch = (u, r) => {
+        const cu = u.replace(/[^a-z0-9]/g, '');
+        const cr = r.replace(/[^a-z0-9]/g, '');
+        return cu === cr || cu.includes(cr) || cr.includes(cu);
+      };
+
+      const matched = [];
+      const missing = [];
+
+      requiredSkills.forEach(req => {
+        if (studentSkills.some(userSkill => isMatch(userSkill, req))) {
+          matched.push(req);
+        } else {
+          missing.push(req);
+        }
+      });
+
+      const percentage = Math.round((matched.length / requiredSkills.length) * 100);
+
+      let recommendation = '';
+      if (percentage === 100) {
+        recommendation = 'Perfect Match! Your skills align with all stated criteria.';
+      } else if (percentage >= 75) {
+        recommendation = `High Match! Brush up on ${missing.slice(0, 2).join(' & ')} before technical interviews.`;
+      } else if (percentage >= 50) {
+        recommendation = `Moderate Match. Build a project utilizing ${missing.slice(0, 2).join(' and ')} to improve your profile.`;
+      } else {
+        recommendation = `Skill Gap. Consider taking tutorials in ${missing.slice(0, 3).join(', ')}.`;
+      }
+
+      return {
+        matchPercentage: percentage,
+        matchedSkills: matched,
+        missingSkills: missing,
+        recommendation,
+        isEligible: percentage >= 50
+      };
+    }
+
+    // --- CSV EXPORTER ---
+    function exportToCSV(data, filename = 'internportal-export.csv') {
+      if (!data || !data.length) {
+        alert('No data available to export.');
+        return;
+      }
+      const headers = Object.keys(data[0]);
+      const csvRows = [headers.join(',')];
+      for (const row of data) {
+        const values = headers.map(header => {
+          const escaped = ('' + (row[header] ?? '')).replace(/"/g, '""');
+          return `"${escaped}"`;
+        });
+        csvRows.push(values.join(','));
+      }
+      const blob = new Blob([csvRows.join('\n')], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.setAttribute('href', url);
+      a.setAttribute('download', filename);
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    // --- APP ROOT COMPONENT ---
+    function App() {
+      const [user, setUser] = useState(() => {
+        const saved = localStorage.getItem('internportal_active_user');
+        return saved ? JSON.parse(saved) : initialUsers[1]; // Default to Student Aarav
+      });
+
+      const [currentPage, setCurrentPage] = useState('home');
+      const [internships, setInternships] = useState(initialInternships);
+      const [applications, setApplications] = useState(initialApplications);
+      const [interviews, setInterviews] = useState(initialInterviews);
+      const [selectedInternshipId, setSelectedInternshipId] = useState(1);
+      const [savedIds, setSavedIds] = useState([2]);
+
+      // Filters
+      const [searchQuery, setSearchQuery] = useState('');
+      const [domainFilter, setDomainFilter] = useState('');
+      const [workModeFilter, setWorkModeFilter] = useState('');
+      const [minStipend, setMinStipend] = useState(0);
+
+      // Notification count
+      const [unreadCount, setUnreadCount] = useState(2);
+
+      const switchRole = (role) => {
+        let target;
+        if (role === 'STUDENT') target = initialUsers[1];
+        else if (role === 'RECRUITER') target = initialUsers[2];
+        else if (role === 'ADMIN') target = initialUsers[0];
+
+        setUser(target);
+        localStorage.setItem('internportal_active_user', JSON.stringify(target));
+        if (role === 'STUDENT') setCurrentPage('student-dashboard');
+        else if (role === 'RECRUITER') setCurrentPage('recruiter-dashboard');
+        else if (role === 'ADMIN') setCurrentPage('admin-dashboard');
+      };
+
+      const toggleBookmark = (id) => {
+        if (savedIds.includes(id)) {
+          setSavedIds(savedIds.filter(x => x !== id));
+        } else {
+          setSavedIds([...savedIds, id]);
+        }
+      };
+
+      const handleApply = (internship, coverNote) => {
+        if (applications.some(a => a.internshipId === internship.id && a.studentId === user.id)) {
+          alert('You have already applied for this role!');
+          return;
+        }
+
+        const match = calculateSkillMatch(user.skills, internship.requiredSkills);
+        const newApp = {
+          id: Date.now(),
+          internshipId: internship.id,
+          internshipTitle: internship.title,
+          companyName: internship.companyName,
+          domain: internship.domain,
+          location: internship.location,
+          stipendAmount: internship.stipendAmount,
+          studentId: user.id,
+          studentName: user.name,
+          studentEmail: user.email,
+          studentPhone: user.phone || '+91 9811223344',
+          studentCollege: user.collegeName || 'National Institute of Engineering',
+          studentBranch: user.branch || 'Computer Science',
+          studentCgpa: user.cgpa ? user.cgpa.toString() : '8.85',
+          studentSkills: user.skills,
+          coverNote,
+          resumeUrl: user.resumeFileName,
+          skillMatchPercentage: match.matchPercentage,
+          matchedSkills: match.matchedSkills.join(', '),
+          missingSkills: match.missingSkills.join(', '),
+          status: 'APPLIED',
+          recruiterFeedback: 'Application received and currently queued for review.',
+          appliedAt: new Date().toISOString()
+        };
+
+        setApplications([newApp, ...applications]);
+        alert('🎉 Application submitted successfully! Tracking is active in your dashboard.');
+        setCurrentPage('applications');
+      };
+
+      const handleStatusUpdate = (appId, newStatus) => {
+        setApplications(applications.map(a => a.id === appId ? { ...a, status: newStatus } : a));
+      };
+
+      const handleScheduleInterview = (app) => {
+        const date = prompt('Enter Interview Date (YYYY-MM-DD):', '2026-11-20');
+        if (!date) return;
+        const time = prompt('Enter Interview Time:', '11:30 AM');
+        const link = prompt('Enter Meeting URL:', 'https://meet.google.com/xyz-intern-panel');
+
+        const newIv = {
+          id: Date.now(),
+          applicationId: app.id,
+          studentId: app.studentId,
+          studentName: app.studentName,
+          studentEmail: app.studentEmail,
+          recruiterId: user.id,
+          companyName: app.companyName,
+          internshipId: app.internshipId,
+          internshipTitle: app.internshipTitle,
+          title: 'Technical Evaluation Round',
+          scheduledDate: date,
+          scheduledTime: time || '11:00 AM',
+          meetingLink: link || 'https://meet.google.com/demo-meet',
+          status: 'SCHEDULED'
+        };
+
+        setInterviews([newIv, ...interviews]);
+        handleStatusUpdate(app.id, 'INTERVIEW_SCHEDULED');
+        alert('Interview scheduled and invite dispatched!');
+      };
+
+      const handlePostInternship = (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const newInt = {
+          id: Date.now(),
+          recruiterId: user.id,
+          title: form.title.value,
+          companyName: user.companyName || 'Enterprise Partner',
+          domain: form.domain.value,
+          description: form.description.value,
+          responsibilities: form.responsibilities.value,
+          requirements: form.requirements.value,
+          requiredSkills: form.requiredSkills.value,
+          location: form.location.value,
+          workMode: form.workMode.value,
+          stipendAmount: parseInt(form.stipendAmount.value),
+          durationMonths: parseInt(form.durationMonths.value),
+          openingsCount: parseInt(form.openingsCount.value),
+          minCgpa: parseFloat(form.minCgpa.value),
+          applicationDeadline: form.applicationDeadline.value,
+          status: 'ACTIVE',
+          createdAt: new Date().toISOString().split('T')[0]
+        };
+
+        setInternships([newInt, ...internships]);
+        alert('Internship Published Successfully!');
+        setCurrentPage('recruiter-dashboard');
+      };
+
+      return (
+        <div className="app-container">
+          {/* Top Demo Persona Switcher Banner */}
+          <div className="demo-role-banner">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ color: '#93c5fd', fontWeight: 700 }}>⚡ 1-Click Role Switcher:</span>
+              <span>Test presentation modes:</span>
+            </div>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <button
+                onClick={() => switchRole('STUDENT')}
+                className={`role-pill-btn ${user.role === 'STUDENT' ? 'active' : ''}`}
+              >
+                🎓 Student (Aarav)
+              </button>
+              <button
+                onClick={() => switchRole('RECRUITER')}
+                className={`role-pill-btn ${user.role === 'RECRUITER' ? 'active' : ''}`}
+              >
+                🏢 Recruiter (TechCorp)
+              </button>
+              <button
+                onClick={() => switchRole('ADMIN')}
+                className={`role-pill-btn ${user.role === 'ADMIN' ? 'active' : ''}`}
+              >
+                🛡️ Admin (Placement Cell)
+              </button>
+            </div>
+          </div>
+
+          {/* Navigation Bar */}
+          <header className="navbar">
+            <div className="container">
+              <div className="navbar-inner">
+                <div onClick={() => setCurrentPage('home')} className="nav-logo">
+                  <div className="logo-badge">💼</div>
+                  <div>
+                    <span>Intern<span style={{ color: 'var(--primary-600)' }}>Portal</span></span>
+                    <span style={{ display: 'block', fontSize: '0.62rem', fontWeight: 600, color: 'var(--slate-400)', letterSpacing: '0.05em' }}>
+                      ONLINE INTERNSHIP MANAGEMENT
+                    </span>
+                  </div>
+                </div>
+
+                <nav>
+                  <ul className="nav-links">
+                    <li>
+                      <button onClick={() => setCurrentPage('home')} className={`nav-link-btn ${currentPage === 'home' ? 'active' : ''}`}>
+                        Home
+                      </button>
+                    </li>
+                    <li>
+                      <button onClick={() => setCurrentPage('internships')} className={`nav-link-btn ${currentPage === 'internships' ? 'active' : ''}`}>
+                        Browse Internships
+                      </button>
+                    </li>
+
+                    {user.role === 'STUDENT' && (
+                      <>
+                        <li>
+                          <button onClick={() => setCurrentPage('student-dashboard')} className={`nav-link-btn ${currentPage === 'student-dashboard' ? 'active' : ''}`}>
+                            Dashboard
+                          </button>
+                        </li>
+                        <li>
+                          <button onClick={() => setCurrentPage('applications')} className={`nav-link-btn ${currentPage === 'applications' ? 'active' : ''}`}>
+                            My Applications
+                          </button>
+                        </li>
+                        <li>
+                          <button onClick={() => setCurrentPage('profile')} className={`nav-link-btn ${currentPage === 'profile' ? 'active' : ''}`}>
+                            Profile & Resume
+                          </button>
+                        </li>
+                      </>
+                    )}
+
+                    {user.role === 'RECRUITER' && (
+                      <>
+                        <li>
+                          <button onClick={() => setCurrentPage('recruiter-dashboard')} className={`nav-link-btn ${currentPage === 'recruiter-dashboard' ? 'active' : ''}`}>
+                            Recruiter Console
+                          </button>
+                        </li>
+                        <li>
+                          <button onClick={() => setCurrentPage('applicants')} className={`nav-link-btn ${currentPage === 'applicants' ? 'active' : ''}`}>
+                            Applicants
+                          </button>
+                        </li>
+                        <li>
+                          <button onClick={() => setCurrentPage('post-internship')} className={`nav-link-btn ${currentPage === 'post-internship' ? 'active' : ''}`}>
+                            + Post Role
+                          </button>
+                        </li>
+                      </>
+                    )}
+
+                    {user.role === 'ADMIN' && (
+                      <li>
+                        <button onClick={() => setCurrentPage('admin-dashboard')} className={`nav-link-btn ${currentPage === 'admin-dashboard' ? 'active' : ''}`}>
+                          Admin Analytics
+                        </button>
+                      </li>
+                    )}
+
+                    <li>
+                      <button onClick={() => setCurrentPage('about')} className={`nav-link-btn ${currentPage === 'about' ? 'active' : ''}`}>
+                        About
+                      </button>
+                    </li>
+                    <li>
+                      <button onClick={() => setCurrentPage('contact')} className={`nav-link-btn ${currentPage === 'contact' ? 'active' : ''}`}>
+                        Support
+                      </button>
+                    </li>
+                  </ul>
+                </nav>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '4px 10px', background: 'var(--slate-100)', borderRadius: 'var(--radius-full)' }}>
+                    <img src={user.avatarUrl} style={{ width: '28px', height: '28px', borderRadius: '50%' }} alt="" />
+                    <span style={{ fontSize: '0.82rem', fontWeight: 700 }}>{user.name.split(' ')[0]}</span>
+                    <span className="badge badge-blue" style={{ fontSize: '0.65rem' }}>{user.role}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </header>
+
+          {/* MAIN VIEW ROUTER */}
+          <main className="main-content">
+            {/* 1. HOME PAGE */}
+            {currentPage === 'home' && (
+              <div>
+                <section className="hero-gradient" style={{ padding: '64px 0', textAlign: 'center' }}>
+                  <div className="container">
+                    <span className="badge badge-blue" style={{ marginBottom: '16px' }}>
+                      ✨ College Placement & Internship Ecosystem
+                    </span>
+                    <h1 style={{ fontSize: 'clamp(2.2rem, 4vw, 3.4rem)', fontWeight: 800, marginBottom: '16px' }}>
+                      Discover Verified Internships with <span style={{ color: 'var(--primary-600)' }}>Smart Skill Matching</span>
+                    </h1>
+                    <p style={{ fontSize: '1.1rem', color: 'var(--slate-600)', maxWidth: '680px', margin: '0 auto 32px auto' }}>
+                      Connect engineering students, recruiters, and placement administrators to simplify recruitment discovery and progress tracking.
+                    </p>
+
+                    <div style={{ display: 'flex', justifyContent: 'center', gap: '12px' }}>
+                      <button onClick={() => setCurrentPage('internships')} className="btn btn-primary btn-lg">
+                        Browse Opportunities →
+                      </button>
+                      {user.role === 'RECRUITER' ? (
+                        <button onClick={() => setCurrentPage('post-internship')} className="btn btn-secondary btn-lg">
+                          Post an Internship
+                        </button>
+                      ) : (
+                        <button onClick={() => setCurrentPage('student-dashboard')} className="btn btn-secondary btn-lg">
+                          Student Dashboard
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </section>
+
+                {/* Stats */}
+                <section style={{ padding: '36px 0', background: '#fff', borderBottom: '1px solid var(--slate-200)' }}>
+                  <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', textAlign: 'center' }}>
+                    <div>
+                      <h2 style={{ color: 'var(--primary-600)', fontSize: '2.2rem' }}>1,250+</h2>
+                      <p style={{ color: 'var(--slate-500)', fontSize: '0.85rem' }}>Registered Students</p>
+                    </div>
+                    <div>
+                      <h2 style={{ color: 'var(--navy-900)', fontSize: '2.2rem' }}>180+</h2>
+                      <p style={{ color: 'var(--slate-500)', fontSize: '0.85rem' }}>Verified Companies</p>
+                    </div>
+                    <div>
+                      <h2 style={{ color: 'var(--success-700)', fontSize: '2.2rem' }}>94.8%</h2>
+                      <p style={{ color: 'var(--slate-500)', fontSize: '0.85rem' }}>Skill Match Precision</p>
+                    </div>
+                    <div>
+                      <h2 style={{ color: 'var(--purple-700)', fontSize: '2.2rem' }}>₹35,000</h2>
+                      <p style={{ color: 'var(--slate-500)', fontSize: '0.85rem' }}>Top Monthly Stipend</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            )}
+
+            {/* 2. INTERNSHIPS LISTING PAGE */}
+            {currentPage === 'internships' && (
+              <div style={{ padding: '36px 0' }}>
+                <div className="container">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '12px' }}>
+                    <div>
+                      <h2>Explore Open Internships</h2>
+                      <p style={{ color: 'var(--slate-500)', fontSize: '0.9rem' }}>Real-time skill compatibility calculated automatically.</p>
+                    </div>
+                    <input
+                      type="text"
+                      className="form-input"
+                      placeholder="Search title, tech, company..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      style={{ width: '280px' }}
+                    />
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '24px' }}>
+                    {internships
+                      .filter(i => !searchQuery || i.title.toLowerCase().includes(searchQuery.toLowerCase()) || i.requiredSkills.toLowerCase().includes(searchQuery.toLowerCase()))
+                      .map(internship => {
+                        const match = calculateSkillMatch(user.skills || 'React.js, Java, Spring Boot', internship.requiredSkills);
+                        return (
+                          <div key={internship.id} className="card card-hover" style={{ padding: '24px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                            <div>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+                                <span className="badge badge-blue">{internship.domain}</span>
+                                <span className={`skill-match-pill ${match.matchPercentage >= 75 ? 'match-high' : match.matchPercentage >= 50 ? 'match-med' : 'match-low'}`}>
+                                  ✨ {match.matchPercentage}% Match
+                                </span>
+                              </div>
+                              <h3 style={{ fontSize: '1.2rem', marginBottom: '4px' }}>{internship.title}</h3>
+                              <div style={{ color: 'var(--primary-700)', fontWeight: 600, fontSize: '0.9rem', marginBottom: '12px' }}>
+                                {internship.companyName}
+                              </div>
+                              <p style={{ fontSize: '0.85rem', color: 'var(--slate-600)', marginBottom: '16px', lineHeight: 1.5 }}>
+                                {internship.description.substring(0, 120)}...
+                              </p>
+
+                              <div style={{ display: 'flex', gap: '14px', fontSize: '0.82rem', color: 'var(--slate-600)', marginBottom: '14px' }}>
+                                <span>📍 {internship.location}</span>
+                                <span>💰 ₹{internship.stipendAmount.toLocaleString()}/mo</span>
+                                <span>⏱️ {internship.durationMonths}m</span>
+                              </div>
+                            </div>
+
+                            <button
+                              onClick={() => {
+                                const note = prompt('Enter a short cover note for this application:');
+                                if (note !== null) handleApply(internship, note || 'Excited to apply!');
+                              }}
+                              className="btn btn-primary"
+                              style={{ width: '100%' }}
+                            >
+                              Apply Now
+                            </button>
+                          </div>
+                        );
+                      })}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* 3. STUDENT DASHBOARD */}
+            {currentPage === 'student-dashboard' && (
+              <div style={{ padding: '36px 0' }}>
+                <div className="container">
+                  <div style={{ background: 'linear-gradient(135deg, #1e3a8a, #2563eb)', color: '#fff', padding: '28px', borderRadius: 'var(--radius-xl)', marginBottom: '28px' }}>
+                    <h2>Welcome, {user.name}! 🎓</h2>
+                    <p style={{ color: '#dbeafe', margin: '4px 0 0 0' }}>
+                      Profile Completeness: <strong>95%</strong> • Active Applications: <strong>{applications.filter(a => a.studentId === user.id).length}</strong>
+                    </p>
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '20px', marginBottom: '32px' }}>
+                    <div className="card" style={{ padding: '20px' }}>
+                      <span style={{ fontSize: '0.8rem', color: 'var(--slate-500)' }}>APPLICATIONS</span>
+                      <h3 style={{ fontSize: '1.8rem', color: 'var(--primary-600)' }}>{applications.filter(a => a.studentId === user.id).length}</h3>
+                    </div>
+                    <div className="card" style={{ padding: '20px' }}>
+                      <span style={{ fontSize: '0.8rem', color: 'var(--slate-500)' }}>SCHEDULED INTERVIEWS</span>
+                      <h3 style={{ fontSize: '1.8rem', color: 'var(--warning-700)' }}>{interviews.filter(i => i.studentId === user.id).length}</h3>
+                    </div>
+                    <div className="card" style={{ padding: '20px' }}>
+                      <span style={{ fontSize: '0.8rem', color: 'var(--slate-500)' }}>RESUME READINESS</span>
+                      <h3 style={{ fontSize: '1.8rem', color: 'var(--success-700)' }}>95%</h3>
+                    </div>
+                  </div>
+
+                  <div className="card" style={{ padding: '24px' }}>
+                    <h3 style={{ marginBottom: '16px' }}>Upcoming Interview Sessions</h3>
+                    {interviews.filter(i => i.studentId === user.id).length === 0 ? (
+                      <p style={{ color: 'var(--slate-500)' }}>No interviews scheduled at this moment.</p>
+                    ) : (
+                      interviews.filter(i => i.studentId === user.id).map(iv => (
+                        <div key={iv.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px', background: 'var(--slate-50)', borderRadius: 'var(--radius-md)', marginBottom: '10px' }}>
+                          <div>
+                            <strong>{iv.title}</strong> — {iv.companyName}
+                            <div style={{ fontSize: '0.8rem', color: 'var(--slate-500)' }}>Date: {iv.scheduledDate} at {iv.scheduledTime}</div>
+                          </div>
+                          <a href={iv.meetingLink} target="_blank" className="btn btn-primary btn-sm">Join Video Meet</a>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* 4. APPLICATION TRACKER */}
+            {currentPage === 'applications' && (
+              <div style={{ padding: '36px 0' }}>
+                <div className="container">
+                  <h2 style={{ marginBottom: '20px' }}>Application Milestone Tracker</h2>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                    {applications.filter(a => a.studentId === user.id).map(app => (
+                      <div key={app.id} className="card" style={{ padding: '24px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+                          <div>
+                            <span className="badge badge-blue">{app.domain}</span>
+                            <h3 style={{ fontSize: '1.2rem', marginTop: '4px' }}>{app.internshipTitle}</h3>
+                            <div style={{ color: 'var(--primary-700)', fontWeight: 600 }}>{app.companyName}</div>
+                          </div>
+                          <div style={{ textAlign: 'right' }}>
+                            <span className="badge badge-green">{app.status}</span>
+                            <div style={{ fontSize: '0.8rem', color: 'var(--slate-400)', marginTop: '4px' }}>Match: {app.skillMatchPercentage}%</div>
+                          </div>
+                        </div>
+
+                        {/* Pipeline stages */}
+                        <div style={{ display: 'flex', justifyContent: 'space-between', background: 'var(--slate-50)', padding: '12px', borderRadius: 'var(--radius-md)', margin: '14px 0', fontSize: '0.78rem' }}>
+                          <span style={{ fontWeight: 700, color: 'var(--primary-600)' }}>1. Applied ✓</span>
+                          <span style={{ fontWeight: 700, color: app.status !== 'APPLIED' ? 'var(--primary-600)' : 'var(--slate-400)' }}>2. Under Review</span>
+                          <span style={{ fontWeight: 700, color: ['SHORTLISTED', 'INTERVIEW_SCHEDULED', 'SELECTED'].includes(app.status) ? 'var(--primary-600)' : 'var(--slate-400)' }}>3. Shortlisted</span>
+                          <span style={{ fontWeight: 700, color: ['INTERVIEW_SCHEDULED', 'SELECTED'].includes(app.status) ? 'var(--primary-600)' : 'var(--slate-400)' }}>4. Interview</span>
+                          <span style={{ fontWeight: 700, color: app.status === 'SELECTED' ? 'var(--success-700)' : 'var(--slate-400)' }}>5. Selected 🎉</span>
+                        </div>
+
+                        <div style={{ fontSize: '0.85rem', color: 'var(--slate-600)' }}>
+                          <strong>Recruiter Feedback:</strong> {app.recruiterFeedback || 'Application is being evaluated.'}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* 5. RECRUITER APPLICANT MANAGEMENT */}
+            {currentPage === 'applicants' && (
+              <div style={{ padding: '36px 0' }}>
+                <div className="container">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+                    <div>
+                      <h2>Applicant Screening & Talent Console</h2>
+                      <p style={{ color: 'var(--slate-500)' }}>Review candidates, schedule interviews, and update application stages.</p>
+                    </div>
+                    <button
+                      onClick={() => {
+                        const exportData = applications.map(a => ({
+                          'ID': a.id,
+                          'Student': a.studentName,
+                          'Email': a.studentEmail,
+                          'College': a.studentCollege,
+                          'Role': a.internshipTitle,
+                          'Match %': a.skillMatchPercentage,
+                          'Status': a.status
+                        }));
+                        exportToCSV(exportData, 'Applicants_Export.csv');
+                      }}
+                      className="btn btn-secondary"
+                    >
+                      Export CSV
+                    </button>
+                  </div>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                    {applications.map(app => (
+                      <div key={app.id} className="card" style={{ padding: '20px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '12px' }}>
+                          <div>
+                            <h3>{app.studentName}</h3>
+                            <div style={{ fontSize: '0.85rem', color: 'var(--slate-600)' }}>
+                              {app.studentCollege} • CGPA: {app.studentCgpa} • {app.studentEmail}
+                            </div>
+                            <div style={{ fontSize: '0.85rem', color: 'var(--primary-700)', fontWeight: 600, marginTop: '4px' }}>
+                              Applied for: {app.internshipTitle}
+                            </div>
+                          </div>
+
+                          <div style={{ textAlign: 'right' }}>
+                            <span className="skill-match-pill match-high">✨ {app.skillMatchPercentage}% Skill Match</span>
+                            <div style={{ marginTop: '4px' }}><span className="badge badge-blue">{app.status}</span></div>
+                          </div>
+                        </div>
+
+                        <div style={{ margin: '14px 0', padding: '10px', background: 'var(--slate-50)', borderRadius: 'var(--radius-md)', fontSize: '0.85rem' }}>
+                          <strong>Skills:</strong> {app.studentSkills}
+                        </div>
+
+                        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                          <button onClick={() => handleStatusUpdate(app.id, 'SHORTLISTED')} className="btn btn-outline-primary btn-sm">
+                            Shortlist
+                          </button>
+                          <button onClick={() => handleScheduleInterview(app)} className="btn btn-primary btn-sm">
+                            📅 Schedule Interview
+                          </button>
+                          <button onClick={() => handleStatusUpdate(app.id, 'SELECTED')} className="btn btn-success btn-sm">
+                            Select & Offer
+                          </button>
+                          <button onClick={() => handleStatusUpdate(app.id, 'REJECTED')} className="btn btn-danger btn-sm">
+                            Reject
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* 6. POST INTERNSHIP */}
+            {currentPage === 'post-internship' && (
+              <div style={{ padding: '36px 0' }}>
+                <div className="container" style={{ maxWidth: '700px' }}>
+                  <div className="card" style={{ padding: '32px' }}>
+                    <h2 style={{ marginBottom: '20px' }}>Publish New Internship Opening</h2>
+                    <form onSubmit={handlePostInternship}>
+                      <div className="form-group">
+                        <label className="form-label">Job Title</label>
+                        <input name="title" className="form-input" defaultValue="Full Stack React & Spring Boot Intern" required />
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">Domain</label>
+                        <select name="domain" className="form-select">
+                          <option value="Web Development">Web Development</option>
+                          <option value="Data Science & AI">Data Science & AI</option>
+                          <option value="Cloud & DevOps">Cloud & DevOps</option>
+                          <option value="Backend Development">Backend Development</option>
+                        </select>
+                      </div>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                        <div className="form-group">
+                          <label className="form-label">Monthly Stipend (INR ₹)</label>
+                          <input name="stipendAmount" type="number" className="form-input" defaultValue="25000" required />
+                        </div>
+                        <div className="form-group">
+                          <label className="form-label">Duration (Months)</label>
+                          <input name="durationMonths" type="number" className="form-input" defaultValue="6" required />
+                        </div>
+                      </div>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                        <div className="form-group">
+                          <label className="form-label">Work Mode</label>
+                          <select name="workMode" className="form-select">
+                            <option value="REMOTE">Remote</option>
+                            <option value="HYBRID">Hybrid</option>
+                            <option value="IN_OFFICE">In-Office</option>
+                          </select>
+                        </div>
+                        <div className="form-group">
+                          <label className="form-label">Location</label>
+                          <input name="location" className="form-input" defaultValue="Bengaluru, Karnataka" required />
+                        </div>
+                      </div>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                        <div className="form-group">
+                          <label className="form-label">Openings</label>
+                          <input name="openingsCount" type="number" className="form-input" defaultValue="3" required />
+                        </div>
+                        <div className="form-group">
+                          <label className="form-label">Min CGPA</label>
+                          <input name="minCgpa" type="number" step="0.1" className="form-input" defaultValue="7.5" required />
+                        </div>
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">Required Skills (Comma-separated)</label>
+                        <input name="requiredSkills" className="form-input" defaultValue="React.js, JavaScript, Spring Boot, MySQL, Git" required />
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">Job Description</label>
+                        <textarea name="description" className="form-textarea" rows="3" defaultValue="Exciting engineering internship building cloud microservices." required />
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">Responsibilities</label>
+                        <textarea name="responsibilities" className="form-textarea" rows="2" defaultValue="• Design frontend components\n• Write REST APIs" />
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">Requirements</label>
+                        <textarea name="requirements" className="form-textarea" rows="2" defaultValue="• Enrolled in engineering program" />
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">Application Deadline</label>
+                        <input name="applicationDeadline" type="date" className="form-input" defaultValue="2026-12-30" required />
+                      </div>
+
+                      <button type="submit" className="btn btn-primary btn-lg" style={{ width: '100%' }}>
+                        Publish Opening
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* 7. RECRUITER DASHBOARD */}
+            {currentPage === 'recruiter-dashboard' && (
+              <div style={{ padding: '36px 0' }}>
+                <div className="container">
+                  <div style={{ background: 'linear-gradient(135deg, #0f172a, #1e293b)', color: '#fff', padding: '28px', borderRadius: 'var(--radius-xl)', marginBottom: '28px' }}>
+                    <h2>Recruiter Console • {user.companyName}</h2>
+                    <p style={{ color: '#cbd5e1' }}>Manage campus hiring drives, view applicants, and schedule video calls.</p>
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '32px' }}>
+                    <div className="card" style={{ padding: '20px' }}>
+                      <span style={{ fontSize: '0.8rem', color: 'var(--slate-500)' }}>ACTIVE ROLES</span>
+                      <h3 style={{ fontSize: '1.8rem', color: 'var(--primary-600)' }}>{internships.length}</h3>
+                    </div>
+                    <div className="card" style={{ padding: '20px' }}>
+                      <span style={{ fontSize: '0.8rem', color: 'var(--slate-500)' }}>TOTAL APPLICANTS</span>
+                      <h3 style={{ fontSize: '1.8rem', color: 'var(--purple-700)' }}>{applications.length}</h3>
+                    </div>
+                    <div className="card" style={{ padding: '20px' }}>
+                      <span style={{ fontSize: '0.8rem', color: 'var(--slate-500)' }}>SCHEDULED MEETS</span>
+                      <h3 style={{ fontSize: '1.8rem', color: 'var(--warning-700)' }}>{interviews.length}</h3>
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'flex', gap: '12px' }}>
+                    <button onClick={() => setCurrentPage('applicants')} className="btn btn-primary">
+                      Manage Applicants →
+                    </button>
+                    <button onClick={() => setCurrentPage('post-internship')} className="btn btn-secondary">
+                      + Post New Role
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* 8. ADMIN DASHBOARD */}
+            {currentPage === 'admin-dashboard' && (
+              <div style={{ padding: '36px 0' }}>
+                <div className="container">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+                    <div>
+                      <h2>Campus Placement Administration</h2>
+                      <p style={{ color: 'var(--slate-500)' }}>Overall drive analytics and conversion funnel statistics.</p>
+                    </div>
+                    <button
+                      onClick={() => {
+                        const exportData = applications.map(a => ({
+                          'ID': a.id,
+                          'Student': a.studentName,
+                          'College': a.studentCollege,
+                          'Role': a.internshipTitle,
+                          'Status': a.status
+                        }));
+                        exportToCSV(exportData, 'Placement_Summary.csv');
+                      }}
+                      className="btn btn-primary"
+                    >
+                      Export Placement Report (CSV)
+                    </button>
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '32px' }}>
+                    <div className="card" style={{ padding: '20px' }}>
+                      <span style={{ fontSize: '0.8rem', color: 'var(--slate-500)' }}>ENROLLED STUDENTS</span>
+                      <h3 style={{ fontSize: '1.8rem', color: 'var(--primary-600)' }}>1,250</h3>
+                    </div>
+                    <div className="card" style={{ padding: '20px' }}>
+                      <span style={{ fontSize: '0.8rem', color: 'var(--slate-500)' }}>ACTIVE INTERNSHIPS</span>
+                      <h3 style={{ fontSize: '1.8rem', color: 'var(--navy-900)' }}>{internships.length}</h3>
+                    </div>
+                    <div className="card" style={{ padding: '20px' }}>
+                      <span style={{ fontSize: '0.8rem', color: 'var(--slate-500)' }}>TOTAL APPLICATIONS</span>
+                      <h3 style={{ fontSize: '1.8rem', color: 'var(--warning-700)' }}>{applications.length}</h3>
+                    </div>
+                    <div className="card" style={{ padding: '20px' }}>
+                      <span style={{ fontSize: '0.8rem', color: 'var(--slate-500)' }}>OFFERS RELEASED</span>
+                      <h3 style={{ fontSize: '1.8rem', color: 'var(--success-700)' }}>
+                        {applications.filter(a => a.status === 'SELECTED').length}
+                      </h3>
+                    </div>
+                  </div>
+
+                  <div className="card" style={{ padding: '24px' }}>
+                    <h3 style={{ marginBottom: '16px' }}>Application Funnel Breakdown</h3>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                      {['APPLIED', 'UNDER_REVIEW', 'SHORTLISTED', 'INTERVIEW_SCHEDULED', 'SELECTED'].map(st => {
+                        const cnt = applications.filter(a => a.status === st).length;
+                        return (
+                          <div key={st}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', fontWeight: 600, marginBottom: '4px' }}>
+                              <span>{st.replace('_', ' ')}</span>
+                              <span>{cnt} candidates</span>
+                            </div>
+                            <div style={{ height: '8px', background: 'var(--slate-100)', borderRadius: '999px', overflow: 'hidden' }}>
+                              <div style={{ height: '100%', width: `${Math.max(cnt * 30, 10)}%`, background: 'var(--primary-600)' }} />
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* 9. STUDENT PROFILE */}
+            {currentPage === 'profile' && (
+              <div style={{ padding: '36px 0' }}>
+                <div className="container" style={{ maxWidth: '700px' }}>
+                  <div className="card" style={{ padding: '32px' }}>
+                    <h2 style={{ marginBottom: '20px' }}>Verified Student Profile</h2>
+                    <div className="form-group">
+                      <label className="form-label">Full Name</label>
+                      <input className="form-input" defaultValue={user.name} />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">College / University</label>
+                      <input className="form-input" defaultValue={user.collegeName || 'National Institute of Engineering'} />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">Skills</label>
+                      <input className="form-input" defaultValue={user.skills} />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">PDF Resume</label>
+                      <div style={{ padding: '16px', background: 'var(--slate-50)', borderRadius: 'var(--radius-md)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span>📄 {user.resumeFileName || 'Aarav_Sharma_Resume.pdf'} (95% Completeness)</span>
+                        <button onClick={() => alert('Resume updated!')} className="btn btn-secondary btn-sm">Upload New</button>
+                      </div>
+                    </div>
+                    <button onClick={() => alert('Profile saved!')} className="btn btn-primary" style={{ marginTop: '16px' }}>
+                      Save Profile Changes
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* 10. ABOUT US */}
+            {currentPage === 'about' && (
+              <div style={{ padding: '48px 0' }}>
+                <div className="container" style={{ maxWidth: '800px', textAlign: 'center' }}>
+                  <span className="badge badge-blue" style={{ marginBottom: '12px' }}>Academic Mini-Project</span>
+                  <h1 style={{ marginBottom: '16px' }}>About InternPortal</h1>
+                  <p style={{ color: 'var(--slate-600)', lineHeight: 1.6, marginBottom: '32px' }}>
+                    Built with React.js, Java Spring Boot, and MySQL. Provides smart skill matching, transparent application pipelines, and administrative reporting for college campuses.
+                  </p>
+                  <button onClick={() => setCurrentPage('internships')} className="btn btn-primary">
+                    Explore Internships
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* 11. CONTACT US */}
+            {currentPage === 'contact' && (
+              <div style={{ padding: '48px 0' }}>
+                <div className="container" style={{ maxWidth: '600px' }}>
+                  <div className="card" style={{ padding: '32px' }}>
+                    <h2 style={{ marginBottom: '16px' }}>Placement Support Desk</h2>
+                    <p style={{ color: 'var(--slate-500)', marginBottom: '20px' }}>Contact the college placement office for recruitment assistance.</p>
+                    <div className="form-group">
+                      <label className="form-label">Name</label>
+                      <input className="form-input" defaultValue={user.name} />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">Message</label>
+                      <textarea className="form-textarea" rows="3" placeholder="Enter inquiry..." />
+                    </div>
+                    <button onClick={() => alert('Inquiry submitted to placement desk!')} className="btn btn-primary" style={{ width: '100%' }}>
+                      Send Message
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </main>
+
+          {/* Footer */}
+          <footer style={{ background: '#fff', borderTop: '1px solid var(--slate-200)', padding: '24px 0', textAlign: 'center', fontSize: '0.85rem', color: 'var(--slate-500)' }}>
+            <div className="container">
+              © 2026 InternPortal – Online Internship Management System • Single-File GitHub & Presentation Edition
+            </div>
+          </footer>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
